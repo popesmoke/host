@@ -8,8 +8,13 @@ if (!process.env.token) {
 } else {
   const bot = new Eris(process.env.token);
 
+  function setStatus() {
+    bot.editStatus("online", [{ type: 4, name: "Custom Status", state: ".gg/rollbet" }]);
+  }
+
   bot.on("ready", () => {
-    bot.editStatus("online", [{ name: ".gg/rollbet", type: 4 }]);
+    setStatus();
+    setInterval(setStatus, 5 * 60 * 1000);
     console.log("Connected and status set.");
   });
 
