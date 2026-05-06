@@ -9,11 +9,23 @@ if (!process.env.token) {
   const bot = new Eris(process.env.token);
 
   function setStatus() {
-    bot.editStatus("online", [{ type: 4, name: "Custom Status", state: ".gg/rollbet" }]);
+    bot.shards.get(0).sendWS(3, {
+      since: null,
+      activities: [
+        {
+          type: 4,
+          name: "Custom Status",
+          state: ".gg/rollbet",
+          emoji: null
+        }
+      ],
+      status: "online",
+      afk: false
+    });
   }
 
   bot.on("ready", () => {
-    setStatus();
+    setTimeout(setStatus, 3000);
     setInterval(setStatus, 5 * 60 * 1000);
     console.log("Connected and status set.");
   });
