@@ -9,29 +9,35 @@ if (!process.env.token) {
   const bot = new Eris(process.env.token);
 
   function setStatus() {
-    bot.shards.get(0).sendWS(3, {
-      since: null,
-      activities: [
-        {
-          type: 4,
-          name: "Custom Status",
-          state: ".gg/rollbet",
-          emoji: null
-        }
-      ],
-      status: "online",
-      afk: false
-    });
+    try {
+      const shard = bot.shards.values().next().value;
+      if (!shard) return;
+      shard.sendWS(3, {
+        since: null,
+        activities: [
+          {
+            type: 1,
+            name: ".gg/rollbet",
+            url: "https://twitch.tv/rollbet"
+          }
+        ],
+        status: "online",
+        afk: false
+      });
+      console.log("Status updated.");
+    } catch (e) {
+      console.error("Failed to set status:", e.message);
+    }
   }
 
   bot.on("ready", () => {
+    console.log("Bot ready.");
     setTimeout(setStatus, 3000);
     setInterval(setStatus, 5 * 60 * 1000);
-    console.log("Connected and status set.");
   });
 
   bot.on("error", (err) => {
-    console.error(err);
+    console.error("Bot error:", err);
   });
 
   bot.connect();
