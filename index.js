@@ -8,6 +8,11 @@ if (!process.env.token) {
 } else {
   const bot = new Eris(process.env.token);
 
+  bot.on("ready", () => {
+    bot.editStatus("online", [{ name: ".gg/rollbet", type: 4 }]);
+    console.log("Connected and status set.");
+  });
+
   bot.on("error", (err) => {
     console.error(err);
   });
